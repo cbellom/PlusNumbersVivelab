@@ -8,11 +8,11 @@ describe("Parser English Number", function() {
     expect(ParserEnglishNumber.englishNumber).toBeDefined();
   });
 
-  it("should be able parser only zero number", function() {
+  it("should be able to parser only zero number", function() {
     expect(ParserEnglishNumber.parse("zero")).toEqual(0);
   });
 
-  it("should be able parser only atom units", function() {
+  it("should be able to parser only atom units", function() {
     expect(ParserEnglishNumber.parse("one")).toEqual(1);
     expect(ParserEnglishNumber.parse("two")).toEqual(2);
     expect(ParserEnglishNumber.parse("three")).toEqual(3);
@@ -24,7 +24,7 @@ describe("Parser English Number", function() {
     expect(ParserEnglishNumber.parse("nine")).toEqual(9);
   });
 
-  it("should be able parser only atom tens", function() {
+  it("should be able to parser only atom tens", function() {
     expect(ParserEnglishNumber.parse("ten")).toEqual(10);
     expect(ParserEnglishNumber.parse("eleven")).toEqual(11);
     expect(ParserEnglishNumber.parse("twelve")).toEqual(12);
@@ -37,7 +37,7 @@ describe("Parser English Number", function() {
     expect(ParserEnglishNumber.parse("nineteen")).toEqual(19);
   });
 
-  it("should be able parser only tens", function() {
+  it("should be able to parser only tens", function() {
     expect(ParserEnglishNumber.parse("twenty")).toEqual(20);
     expect(ParserEnglishNumber.parse("thirty")).toEqual(30);
     expect(ParserEnglishNumber.parse("forty")).toEqual(40);
@@ -48,17 +48,17 @@ describe("Parser English Number", function() {
     expect(ParserEnglishNumber.parse("ninety")).toEqual(90);
   });
 
-  it("should be able parser only hundred number", function() {
+  it("should be able to parser only hundred number", function() {
     expect(ParserEnglishNumber.parse("hundred")).toEqual(100);
   });
 
-  it("should be able validate zero number", function() {
+  it("should be able to validate zero number", function() {
     expect(ParserEnglishNumber.isZero("zero")).toEqual(true);
     expect(ParserEnglishNumber.isZero("xxxx")).toEqual(false);
     expect(ParserEnglishNumber.isZero("")).toEqual(false);
   });
 
-  it("should be able validate atoms numbers", function() {
+  it("should be able to validate atoms numbers", function() {
     expect(ParserEnglishNumber.isAtomNumber("one")).toEqual(true);
     expect(ParserEnglishNumber.isAtomNumber("two")).toEqual(true);
     expect(ParserEnglishNumber.isAtomNumber("three")).toEqual(true);
@@ -72,7 +72,7 @@ describe("Parser English Number", function() {
     expect(ParserEnglishNumber.isAtomNumber("")).toEqual(false);
   });
 
-  it("should be able validate tens", function() {
+  it("should be able to validate tens", function() {
     expect(ParserEnglishNumber.isAtomNumber("one")).toEqual(true);
     expect(ParserEnglishNumber.isAtomNumber("two")).toEqual(true);
     expect(ParserEnglishNumber.isAtomNumber("three")).toEqual(true);
@@ -86,7 +86,7 @@ describe("Parser English Number", function() {
     expect(ParserEnglishNumber.isAtomNumber("")).toEqual(false);
   });
 
-  it("should be able validate atoms tens", function() {
+  it("should be able to validate atoms tens", function() {
     expect(ParserEnglishNumber.isTens("twenty")).toEqual(true);
     expect(ParserEnglishNumber.isTens("thirty")).toEqual(true);
     expect(ParserEnglishNumber.isTens("forty")).toEqual(true);
@@ -99,15 +99,47 @@ describe("Parser English Number", function() {
     expect(ParserEnglishNumber.isTens("")).toEqual(false);
   });
 
-  it("should be able validate hundred number", function() {
+  it("should be able to validate hundred number", function() {
     expect(ParserEnglishNumber.isHundred("hundred")).toEqual(true);
     expect(ParserEnglishNumber.isHundred("xxxx")).toEqual(false);
     expect(ParserEnglishNumber.isHundred("")).toEqual(false);
   });
 
-  it("should be able return null on parse wrong number", function() {
+  it("should return null on parse wrong number of one word", function() {
     expect(ParserEnglishNumber.parse("xxxx")).toEqual(null);
     expect(ParserEnglishNumber.parse("")).toEqual(null);
   });
+
+  it("should be able split of words", function() {
+    expect(ParserEnglishNumber.splitWords("")).toEqual([]);
+    expect(ParserEnglishNumber.splitWords("xxxx")).toEqual(["xxxx"]);
+    expect(ParserEnglishNumber.splitWords("    xxxx ")).toEqual(["xxxx"]);
+    expect(ParserEnglishNumber.splitWords(" one one ")).toEqual(["one","one"]);
+  });
+
+  it("should be able to parser 2-4 words numbers and plus those", function() {
+    expect(ParserEnglishNumber.splitAndPlus("one one")).toEqual(2);
+    expect(ParserEnglishNumber.splitAndPlus("one one one one")).toEqual(4);
+    expect(ParserEnglishNumber.splitAndPlus("forty eleven")).toEqual(51);
+    expect(ParserEnglishNumber.splitAndPlus("twenty one")).toEqual(21);
+    expect(ParserEnglishNumber.splitAndPlus("one hundred")).toEqual(101);
+  });
+
+  it("should be able to validate when is able to parse the number", function() {
+    expect(ParserEnglishNumber.isAbleToParsed(null)).toEqual(false);
+    expect(ParserEnglishNumber.isAbleToParsed("")).toEqual(false);
+    expect(ParserEnglishNumber.isAbleToParsed("one one one one one")).toEqual(false);
+  });
+
+  it("should return null on parse 5 o more words", function() {
+    expect(ParserEnglishNumber.parse("one one one one one")).toEqual(null);
+  });
+
+  it("should return null on parse two words with wrong numbers", function() {
+    expect(ParserEnglishNumber.splitAndPlus("one xx")).toEqual(null);
+    expect(ParserEnglishNumber.splitAndPlus("forty xx")).toEqual(null);
+    expect(ParserEnglishNumber.splitAndPlus("xx hundred")).toEqual(null);
+  });
+
 
 });
