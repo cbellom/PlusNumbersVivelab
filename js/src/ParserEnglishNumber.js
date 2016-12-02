@@ -62,17 +62,29 @@ var ParserEnglishNumber = {
     var array = this.splitWords(numberString);
 
     if( this.hasValidStructure(numberString)){
-      for (index = 0; index < array.length; index++) {
-        var value = this.getWordValue(array[index]);
-
-        if (value != null)
-          numberValue += value;
-        else
-          return null;
-
-      }
+      numberValue = this.getValueFromArray(array);
     } else {
       numberValue = null;
+    }
+
+    return numberValue;
+  },
+
+  getValueFromArray: function(array){
+    var numberValue = 0;
+
+    for (index = array.length - 1; index >= 0; index--) {
+      var value = this.getWordValue(array[index]);
+
+      if(this.isHundredArray(array) && this.isHundred(array[index])){
+        value *= this.getWordValue(array[index - 1]);
+        index--;
+      }
+
+      if (value != null)
+        numberValue += value;
+      else
+        return null;
     }
 
     return numberValue;
@@ -109,6 +121,9 @@ var ParserEnglishNumber = {
   },
   isFourWordsHundredNumber: function(array){
     return this.isAtomUnit(array[0]) && this.isHundred(array[1]) && this.isTens(array[2]) && this.isAtomUnit(array[3]);
+  },
+  isHundredArray: function(array){
+    return array.length >= 2;
   }
 
 };

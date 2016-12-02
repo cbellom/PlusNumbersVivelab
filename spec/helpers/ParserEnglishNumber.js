@@ -120,7 +120,7 @@ describe("Parser English Number", function() {
 
   it("should be able to parser 2-4 words numbers and plus those", function() {
     expect(ParserEnglishNumber.splitAndPlus("twenty one")).toEqual(21);
-    expect(ParserEnglishNumber.splitAndPlus("one hundred")).toEqual(101);
+    expect(ParserEnglishNumber.splitAndPlus("one hundred")).toEqual(100);
   });
 
   it("should be able to validate when is able to parse the number", function() {
@@ -162,5 +162,18 @@ describe("Parser English Number", function() {
     expect(ParserEnglishNumber.hasValidStructure("hundred ten twenty one")).toEqual(false);
     expect(ParserEnglishNumber.hasValidStructure("hundred one twenty one")).toEqual(false);
     expect(ParserEnglishNumber.hasValidStructure("hundred one one one")).toEqual(false);
+  });
+
+  it("should able to plus structured hundreds numbres", function() {
+    expect(ParserEnglishNumber.splitAndPlus("two hundred")).toEqual(200);
+    expect(ParserEnglishNumber.splitAndPlus("two hundred five")).toEqual(205);
+    expect(ParserEnglishNumber.splitAndPlus("two hundred eleven")).toEqual(211);
+    expect(ParserEnglishNumber.splitAndPlus("two hundred twenty one")).toEqual(221);
+    expect(ParserEnglishNumber.splitAndPlus("nine hundred")).toEqual(900);
+  });
+
+  it("should able to parse structured hundreds numbres", function() {
+    expect(ParserEnglishNumber.parse("two hundred")).toEqual(200);
+    expect(ParserEnglishNumber.parse("two hundred hundred")).toEqual(null);
   });
 });
