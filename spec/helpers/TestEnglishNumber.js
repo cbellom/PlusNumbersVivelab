@@ -64,4 +64,8 @@ describe("English Number", function() {
     expect(EnglishNumber.zero["zero"]).toBeDefined();
   });
 
+  it("should able to find key by value", function() {
+    expect(EnglishNumber.zero.getKeyByValue(0)).toEqual("zero");
+  });
+
 });
