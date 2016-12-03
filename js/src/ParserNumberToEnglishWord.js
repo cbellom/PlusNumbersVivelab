@@ -3,12 +3,55 @@ var EnglishNumber = require('../../js/src/EnglishNumber');
 
 var ParserNumberToEnglishWord = {
   englishNumber: EnglishNumber,
+  atomNumber : null,
+  tensNumber : null,
+  hundredsNumber : null,
 
   parse: function(number){
-    if(number == 0)
-      return "zero";
-    else
-      return this.englishNumber.atomUnit.getKeyByValue(number);
+    this.tensNumber = this.getTensNumber(number);
+    this.atomNumber = this.getAtomNumber(number);
+    this.hundredsNumber = this.getHundredsNumber(number);
+
+    return this.getNumberString(number);
+  },
+
+  getNumberString: function(number){
+    var numberString = null;
+    var atomNumberString = null;
+    var tensNumberString = null;
+    var hundredsNumberString = null;
+
+    if(number == 0) {
+      numberString = this.englishNumber.zero.getKeyByValue(number);
+    } else {
+      atomNumberString = this.getAtomNumberString();
+      tensNumberString = this.getTensNumberString();
+      hundredsNumberString = this.getHundredsNumberString();
+
+      numberString = atomNumberString != null ? atomNumberString : null;
+      numberString = tensNumberString != null ? tensNumberString  + (numberString != null ? " " + numberString : "") : numberString;
+      numberString = hundredsNumberString != null ? hundredsNumberString  + (numberString != null ? " " + numberString : "") : numberString;
+    }
+
+    return numberString;
+  },
+  getAtomNumberString: function(){
+      if(this.atomNumber != null)
+        return this.getAtomNumberValue(this.atomNumber);
+
+      return null;
+  },
+  getTensNumberString: function(){
+      if(this.tensNumber != null)
+        return this.englishNumber.tens.getKeyByValue(this.tensNumber);
+
+      return null;
+  },
+  getHundredsNumberString: function(){
+      if(this.hundredsNumber != null)
+        return this.getAtomNumberValue(this.hundredsNumber / 100) + " " + this.englishNumber.hundred.getKeyByValue(100);
+
+      return null;
   },
 
   getAtomNumber: function(number){
@@ -46,6 +89,18 @@ var ParserNumberToEnglishWord = {
       return hundreds;
 
     return null;
+  },
+  getAtomNumberValue: function(number){
+    var atomUnitValue = this.englishNumber.atomUnit.getKeyByValue(number);
+    var atomTensValue = this.englishNumber.atomTens.getKeyByValue(number);
+
+    if(atomUnitValue != null)
+      return atomUnitValue;
+
+    if(atomTensValue != null)
+      return atomTensValue;
+
+    return "";
   },
 
   isAtomTens: function(number){
