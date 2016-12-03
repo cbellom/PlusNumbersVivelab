@@ -9,6 +9,7 @@ describe("Plus English Numbers", function() {
     expect(PlusEnglishNumbers.plus("one","zero")).toEqual("one");
     expect(PlusEnglishNumbers.plus("one","ten")).toEqual("eleven");
     expect(PlusEnglishNumbers.plus("one","twenty")).toEqual("twenty one");
+    expect(PlusEnglishNumbers.plus("one hundred eleven","ten")).toEqual("one hundred twenty one");
     expect(PlusEnglishNumbers.plus("one","hundred")).toEqual("one hundred one");
     expect(PlusEnglishNumbers.plus("999","one")).toEqual("zero");
     expect(PlusEnglishNumbers.plus("zero","0")).toEqual("zero")
