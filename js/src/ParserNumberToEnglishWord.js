@@ -17,20 +17,11 @@ var ParserNumberToEnglishWord = {
 
   getNumberString: function(number){
     var numberString = null;
-    var atomNumberString = null;
-    var tensNumberString = null;
-    var hundredsNumberString = null;
 
     if(number == 0) {
       numberString = this.englishNumber.zero.getKeyByValue(number);
     } else {
-      atomNumberString = this.getAtomNumberString();
-      tensNumberString = this.getTensNumberString();
-      hundredsNumberString = this.getHundredsNumberString();
-
-      numberString = atomNumberString != null ? atomNumberString : null;
-      numberString = tensNumberString != null ? tensNumberString  + (numberString != null ? " " + numberString : "") : numberString;
-      numberString = hundredsNumberString != null ? hundredsNumberString  + (numberString != null ? " " + numberString : "") : numberString;
+      numberString = this.getNumberStringStructured();
     }
 
     return numberString;
@@ -52,6 +43,18 @@ var ParserNumberToEnglishWord = {
         return this.getAtomNumberValue(this.hundredsNumber / 100) + " " + this.englishNumber.hundred.getKeyByValue(100);
 
       return null;
+  },
+  getNumberStringStructured: function(){
+    var numberString = null;
+    var atomNumberString = this.getAtomNumberString();
+    var tensNumberString = this.getTensNumberString();
+    var hundredsNumberString = this.getHundredsNumberString();
+
+    numberString = atomNumberString != null ? atomNumberString : null;
+    numberString = tensNumberString != null ? tensNumberString  + (numberString != null ? " " + numberString : "") : numberString;
+    numberString = hundredsNumberString != null ? hundredsNumberString  + (numberString != null ? " " + numberString : "") : numberString;
+
+    return numberString;
   },
 
   getAtomNumber: function(number){
